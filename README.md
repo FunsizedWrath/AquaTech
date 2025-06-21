@@ -21,15 +21,11 @@ Cette application Flutter permet d'afficher les données météo d'un lieu donn�
 - Design responsive : s'adapte à la largeur de l'écran
 
 ## Exécution du projet
-### Prérequis
-- [Flutter](https://docs.flutter.dev/get-started/install) doit être installé sur votre machine (Windows, macOS ou Linux).
-- Un éditeur compatible (VS Code, Android Studio, etc.) ou le terminal.
-
 ### Installation
 1. Clonez le repository :
    ```bash
-   git clone <url-du-repo>
-   cd <nom-du-repo>
+   git clone https://github.com/FunsizedWrath/AquaTech
+   cd AquaTech
    ```
 2. Installez les dépendances :
    ```bash
@@ -37,7 +33,7 @@ Cette application Flutter permet d'afficher les données météo d'un lieu donn�
    ```
 
 ### Exécution
-- Pour lancer l'application sur un simulateur, un appareil physique ou en mode web :
+- Pour lancer l'application :
   ```bash
   flutter run
   ```
