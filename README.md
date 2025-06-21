@@ -20,6 +20,40 @@ Cette application Flutter permet d'afficher les données météo d'un lieu donn�
   - Couverture nuageuse
 - Design responsive : s'adapte à la largeur de l'écran
 
+## Exécution du projet
+### Prérequis
+- [Flutter](https://docs.flutter.dev/get-started/install) doit être installé sur votre machine (Windows, macOS ou Linux).
+- Un éditeur compatible (VS Code, Android Studio, etc.) ou le terminal.
+
+### Installation
+1. Clonez le repository :
+   ```bash
+   git clone <url-du-repo>
+   cd <nom-du-repo>
+   ```
+2. Installez les dépendances :
+   ```bash
+   flutter pub get
+   ```
+
+### Exécution
+- Pour lancer l'application sur un simulateur, un appareil physique ou en mode web :
+  ```bash
+  flutter run
+  ```
+- Pour cibler explicitement le web :
+  ```bash
+  flutter run -d chrome
+  ```
+- Pour Android :
+  ```bash
+  flutter run -d android
+  ```
+- Pour iOS (macOS uniquement) :
+  ```bash
+  flutter run -d ios
+  ```
+
 ## Utilisation
 
 1. Saisir le nom d'une ville ou les coordonnées (latitude/longitude).
