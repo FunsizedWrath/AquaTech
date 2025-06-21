@@ -7,7 +7,7 @@ Cette application Flutter permet d'afficher les données météo d'un lieu donn�
 - Recherche météo par nom de ville (géocodage automatique via OpenStreetMap)
 - Recherche météo par latitude/longitude
 - Sélection de la date (auto-remplie avec la date du jour) et heure de début/fin (optionnelles)
-- **Villes favorites** :
+- Villes favorites :
   - Ajout/suppression rapide d'une ville favorite (nom + coordonnées)
   - Sélection d'une ville favorite pour remplir automatiquement le formulaire et afficher la météo
   - Les favoris sont sauvegardés et restaurés automatiquement (stockage local)
@@ -18,7 +18,7 @@ Cette application Flutter permet d'afficher les données météo d'un lieu donn�
   - Vent
   - Précipitations
   - Couverture nuageuse
-- **Tableau responsive** : s'adapte à la largeur de l'écran, scroll horizontal sur mobile
+- Tableau responsive : s'adapte à la largeur de l'écran, scroll horizontal sur mobile
 
 ## Utilisation
 
