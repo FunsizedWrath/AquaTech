@@ -1,16 +1,43 @@
-# aquatech
+# Météo Open-Meteo Flutter
 
-A new Flutter project.
+Cette application Flutter permet d'afficher les données météo d'un lieu donné, en utilisant l'API Open-Meteo. L'utilisateur peut rechercher la météo par nom de ville ou par coordonnées géographiques, et choisir un intervalle de temps précis.
 
-## Getting Started
+## Fonctionnalités
 
-This project is a starting point for a Flutter application.
+- Recherche météo par **nom de ville** (géocodage automatique via OpenStreetMap)
+- Recherche météo par **latitude/longitude**
+- Sélection **date et heure de début/fin**
+- Affichage des données météo :
+  - Température
+  - Température ressentie
+  - Humidité
+  - Vent
+  - Précipitations
+  - Couverture nuageuse
+- **Tableau responsive** : s'adapte à la largeur de l'écran, scroll horizontal sur mobile
 
-A few resources to get you started if this is your first Flutter project:
+## Utilisation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. Saisir le nom d'une ville ou les coordonnées (latitude/longitude).
+2. Choisir la date (l'heure est optionnelle) de début et de fin.
+3. Cliquer sur "Obtenir la météo".
+4. Les données météo s'affichent dans un tableau.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Structure du code
+
+- `lib/main.dart` :
+  - `WeatherHomePage` : page principale avec le formulaire de recherche et l'affichage des résultats.
+  - `WeatherDataTable` : widget qui affiche les données météo dans un tableau responsive.
+  - `_fetchLatLonFromCity` : convertit un nom de ville en latitude/longitude (API Nominatim).
+  - `_fetchWeather` : interroge l'API Open-Meteo avec les coordonnées et l'intervalle de temps.
+  - `_combineDateTime` : fusionne une date et une heure en un objet `DateTime`.
+
+## Dépendances
+
+- [http](https://pub.dev/packages/http) : pour les requêtes réseau
+- Flutter Material
+
+## API utilisées
+
+- [Open-Meteo](https://open-meteo.com/)
+- [Nominatim (OpenStreetMap)](https://nominatim.openstreetmap.org/)

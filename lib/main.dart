@@ -118,7 +118,7 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
         child: Center(
           child: SingleChildScrollView(
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: isWide ? 500 : double.infinity),
+              constraints: const BoxConstraints(maxWidth: double.infinity),
               child: Card(
                 elevation: 8,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -335,6 +335,7 @@ class WeatherDataTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isWide = MediaQuery.of(context).size.width > 900;
     final hourly = weatherData['hourly'] ?? {};
     final times = (hourly['time'] as List?) ?? [];
     final temp = (hourly['temperature_2m'] as List?) ?? [];
@@ -354,15 +355,10 @@ class WeatherDataTable extends StatelessWidget {
     }
     return filteredIndexes.isEmpty
         ? const Text('Aucune donnée disponible.')
-        : SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8)],
-              ),
-              child: DataTable(
+        : LayoutBuilder(
+            builder: (context, constraints) {
+              final table = DataTable(
+                columnSpacing: 16,
                 columns: const [
                   DataColumn(label: Text('Heure', style: TextStyle(fontWeight: FontWeight.bold))),
                   DataColumn(label: Text('Temp. (°C)', style: TextStyle(fontWeight: FontWeight.bold))),
@@ -383,8 +379,23 @@ class WeatherDataTable extends StatelessWidget {
                     DataCell(Text(cloud.length > i ? cloud[i].toString() : '-')),
                   ]);
                 }).toList(),
-              ),
-            ),
+              );
+              return Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8)],
+                ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                    child: table,
+                  ),
+                ),
+              );
+            },
           );
   }
 }
