@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,8 +42,40 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
   Map<String, dynamic>? _weatherData;
   bool _loading = false;
   String? _error;
+  List<Map<String, String>> _favoriteCities = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFavoriteCities();
+    final now = DateTime.now();
+    _startDate = now;
+    _endDate = now;
+    _startTime = null;
+    _endTime = null;
+  }
+
+  Future<void> _loadFavoriteCities() async {
+    final prefs = await SharedPreferences.getInstance();
+    final favs = prefs.getStringList('favoriteCities') ?? [];
+    setState(() {
+      _favoriteCities = favs.map((e) => Map<String, String>.from(json.decode(e))).toList();
+    });
+  }
+
+  Future<void> _saveFavoriteCities() async {
+    final prefs = await SharedPreferences.getInstance();
+    final favs = _favoriteCities.map((e) => json.encode(e)).toList();
+    await prefs.setStringList('favoriteCities', favs);
+  }
 
   Future<void> _fetchWeather() async {
+    if (_latController.text.isEmpty || _lonController.text.isEmpty) {
+      setState(() {
+        _error = "Latitude et longitude requises pour la recherche météo.";
+      });
+      return;
+    }
     setState(() {
       _loading = true;
       _error = null;
@@ -97,6 +130,42 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
     return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 
+  void _addFavoriteCity() {
+    final city = _cityController.text.trim();
+    final lat = _latController.text.trim();
+    final lon = _lonController.text.trim();
+    if (city.isNotEmpty && lat.isNotEmpty && lon.isNotEmpty) {
+      if (!_favoriteCities.any((fav) => fav['city'] == city)) {
+        setState(() {
+          _favoriteCities.add({'city': city, 'lat': lat, 'lon': lon});
+        });
+        _saveFavoriteCities();
+      }
+    }
+  }
+
+  void _removeFavoriteCity(String city) {
+    setState(() {
+      _favoriteCities.removeWhere((fav) => fav['city'] == city);
+    });
+    _saveFavoriteCities();
+  }
+
+  void _selectFavoriteCity(Map<String, String> fav) {
+    setState(() {
+      _cityController.text = fav['city'] ?? '';
+      _latController.text = fav['lat']?.trim() ?? '';
+      _lonController.text = fav['lon']?.trim() ?? '';
+    });
+    if (_latController.text.isNotEmpty && _lonController.text.isNotEmpty) {
+      _fetchWeather();
+    } else {
+      setState(() {
+        _error = "Coordonnées invalides pour cette ville favorite.";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 600;
@@ -140,14 +209,51 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
                           ],
                         ),
                         const SizedBox(height: 24),
-                        TextFormField(
-                          controller: _cityController,
-                          decoration: InputDecoration(
-                            labelText: 'Ville (optionnel)',
-                            prefixIcon: Icon(Icons.location_city),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _cityController,
+                                decoration: InputDecoration(
+                                  labelText: 'Ville (optionnel)',
+                                  prefixIcon: Icon(Icons.location_city),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              tooltip: 'Ajouter aux favoris',
+                              icon: const Icon(Icons.star_border, color: Colors.amber),
+                              onPressed: _addFavoriteCity,
+                            ),
+                          ],
                         ),
+                        if (_favoriteCities.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            children: _favoriteCities.map<Widget>((fav) => Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ActionChip(
+                                  label: Text(fav['city'] ?? ''),
+                                  onPressed: () => _selectFavoriteCity(fav),
+                                  avatar: const Icon(Icons.star, color: Colors.amber, size: 18),
+                                  backgroundColor: Colors.blue.shade50,
+                                  labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.close, size: 18),
+                                  tooltip: 'Supprimer',
+                                  onPressed: () => _removeFavoriteCity(fav['city'] ?? ''),
+                                ),
+                              ],
+                            )).toList(),
+                          ),
+                        ],
                         const SizedBox(height: 16),
                         Row(
                           children: [
