@@ -18,14 +18,14 @@ Cette application Flutter permet d'afficher les données météo d'un lieu donn�
   - Vent
   - Précipitations
   - Couverture nuageuse
-- Tableau responsive : s'adapte à la largeur de l'écran, scroll horizontal sur mobile
+- Design responsive : s'adapte à la largeur de l'écran
 
 ## Utilisation
 
 1. Saisir le nom d'une ville ou les coordonnées (latitude/longitude).
 2. Choisir la date (pré-remplie avec la date du jour) et, si besoin, l'heure de début et de fin (optionnelles).
 3. Cliquer sur "Obtenir la météo".
-4. Les données météo s'affichent dans un tableau responsive.
+4. Les données météo s'affichent dans un tableau responsive (scroll horizontal si écran mobile).
 5. Pour ajouter une ville aux favoris, cliquer sur l'étoile à côté du champ ville. Les favoris sont affichés sous forme de boutons, cliquables pour relancer la recherche automatiquement.
 
 ## Structure du code
@@ -36,7 +36,6 @@ Cette application Flutter permet d'afficher les données météo d'un lieu donn�
   - `_fetchLatLonFromCity` : convertit un nom de ville en latitude/longitude (API Nominatim).
   - `_fetchWeather` : interroge l'API Open-Meteo avec les coordonnées et l'intervalle de temps.
   - `_combineDateTime` : fusionne une date et une heure en un objet `DateTime`.
-  - **Gestion des favoris** : sauvegarde/restauration avec `shared_preferences`.
 
 ## Dépendances
 
@@ -47,7 +46,7 @@ Cette application Flutter permet d'afficher les données météo d'un lieu donn�
 ## Pourquoi ces dépendances ?
 
 - **http** : Permet d'effectuer des requêtes HTTP pour interroger l'API Open-Meteo et l'API de géocodage Nominatim (OpenStreetMap). C'est la solution la plus simple et la plus standard pour faire des appels réseau en Flutter/Dart.
-- **shared_preferences** : Permet de sauvegarder localement les villes favorites de l'utilisateur, même après fermeture de l'application. C'est la solution recommandée pour stocker de petites données persistantes (préférences, favoris, etc.) de façon simple et multiplateforme.
+- **shared_preferences** : Permet de sauvegarder localement les villes favorites de l'utilisateur, même après fermeture de l'application. C'est une bonne solution pour stocker de petites données persistantes (préférences, favoris, etc.) de façon simple et multiplateforme.
 - **Flutter Material** : Fournit tous les widgets d'interface modernes, responsives et accessibles, pour un rendu professionnel et cohérent sur mobile/web/desktop.
 
 Ces choix garantissent une application légère, rapide à développer, facile à maintenir et compatible avec tous les environnements Flutter.
@@ -56,5 +55,3 @@ Ces choix garantissent une application légère, rapide à développer, facile �
 
 - [Open-Meteo](https://open-meteo.com/)
 - [Nominatim (OpenStreetMap)](https://nominatim.openstreetmap.org/)
-
-
